@@ -44,6 +44,7 @@ class MainActivity : ComponentActivity() {
                         ExlicitIntentButton(context)
 
                         //Intent with  arguments
+                        //Need to add queries block in manifest
                         ExplicitIntentWithArgs(context)
                     }
                 }
