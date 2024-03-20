@@ -1,8 +1,10 @@
 package com.example.intent
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +42,9 @@ class MainActivity : ComponentActivity() {
 
                         //Directly open an app
                         ExlicitIntentButton(context)
+
+                        //Intent with  arguments
+                        ExplicitIntentWithArgs(context)
                     }
                 }
             }
@@ -57,15 +62,38 @@ fun ImplicitIntentButton(context: Context) {
         Text(text = "Implicit Intent")
     }
 }
+
 @Composable
 fun ExlicitIntentButton(context: Context) {
     Button(onClick = {
-        Intent(Intent.ACTION_MAIN).also {
+        val intent = Intent(Intent.ACTION_MAIN).also {
             it.`package` = "com.google.android.youtube"
-            context.startActivity(it)
+        }
+        try {
+            context.startActivity(intent)
+        }catch (e: ActivityNotFoundException){
+            Toast.makeText(context,e.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }) {
-        Text(text = "Implicit Intent")
+        Text(text = "Explicit Intent")
+    }
+}
+
+@Composable
+fun ExplicitIntentWithArgs(context: Context) {
+    Button(onClick = {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("rasel.cse19.ruet@gmail.com"))
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Sample mail subject")
+        intent.putExtra(Intent.EXTRA_TEXT, "This is sample mail body")
+        try {
+            context.startActivity(intent)
+        }catch (e: Exception){
+            Toast.makeText(context,e.localizedMessage, Toast.LENGTH_SHORT).show()
+        }
+    }) {
+        Text(text = "Explicit Intent With Args")
     }
 }
 
